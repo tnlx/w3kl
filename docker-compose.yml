@@ -1,0 +1,57 @@
+services:
+
+  # ----------------------------------------
+  # nginx - reverse proxy
+  # ----------------------------------------
+
+  nginx:
+    image: nginx:alpine
+    restart: always
+    volumes:
+      - ./web/w3:/var/www/html:ro
+      - ./web/conf.d:/etc/nginx/conf.d:ro
+      - ./web/log:/var/log/nginx
+      - $SSL_DIR:/etc/nginx/ssl:ro
+      - $ACM_DIR:/var/www/acme:ro
+    ports:
+      - '80:80'
+      - '443:443'
+
+  # ----------------------------------------
+  # Let's Encrypt
+  # ----------------------------------------
+
+  certbot:
+    image: certbot/cerbot
+    depends_on:
+      - nginx
+    restart: no                 # run & exit
+    volumes:
+      - "$SSL_DIR:/etc/letsencrypt"
+      - "$ACM_DIR:/var/www/html"
+    command: >
+      certonly
+      --webroot -w /var/www/html
+      -d "keyli3e.com"
+      -d "www.keyli3e.com"
+      -m "$CONTACT_EMAIL"
+      --non-interactive
+      --agree-tos
+
+  # ----------------------------------------
+  # Git-sync
+  # ----------------------------------------
+
+  w3-sync:
+    image: registry.k8s.io/git-sync/git-sync:v4.3.0
+    restart: always
+    user: 1000:1000
+    volumes:
+      - ./web/src:/tmp/git
+      - ./git/ssh:/etc/ssh
+    command: >
+      --repo=git@github.com:tnlx/keyli3e.com.git
+      --root=/tmp/git/root
+      --period=10m
+      --link=./web/src
+      --ssh-key-file=/etc/ssh/pvkey
