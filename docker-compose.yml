@@ -6,9 +6,9 @@ volumes:
 
 services:
 
-  # ----------------------------------------
-  # nginx - reverse proxy
-  # ----------------------------------------
+  # -----------------------------------------
+  # webserver
+  # -----------------------------------------
 
   nginx:
     image: nginx:alpine
@@ -26,9 +26,9 @@ services:
       - web
       - certs
 
-  # ----------------------------------------
+  # -----------------------------------------
   # Let's Encrypt
-  # ----------------------------------------
+  # -----------------------------------------
 
   certbot:
     image: certbot/cerbot
@@ -43,15 +43,15 @@ services:
       --webroot -w /var/www/html
       -d "keyli3e.com"
       -d "www.keyli3e.com"
-      -m "$CONTACT_EMAIL"
+      -m "$CERT_EMAIL"
       --non-interactive
       --agree-tos
     profiles:
       - certs
 
-  # ----------------------------------------
+  # -----------------------------------------
   # Git-sync
-  # ----------------------------------------
+  # -----------------------------------------
 
   # w3-sync:
   #   image: registry.k8s.io/git-sync/git-sync:v4.3.0
@@ -66,13 +66,15 @@ services:
   #     --period=5m
   #     --ssh-key-file=/cfg/id_ed25519
 
-  # ----------------------------------------
+  # -----------------------------------------
   # w3-build
-  # ----------------------------------------
+  #   SSH_URL_KLCOM :   the url to access the
+  #                     repository via SSH.
+  # -----------------------------------------
 
   w3-build:
     build:
-      context: git@github.com:tnlx/keyli3e.com.git#main
+      context: ${SSH_URL_KLCOM:-git@github.com:tnlx/keyli3e.com.git}#main
       ssh:
         - default              # mount the default SSH agent
       no_cache: true
@@ -80,9 +82,6 @@ services:
         BUILDKIT_CONTEXT_KEEP_GIT_DIR: 1
     restart: no                # run & exit
     volumes:
-        - w3:/html:rw
-    command: >
-      --baseURL https://keyli3e.com
-      --destination /html
+      - w3:/html:rw
     profiles:
       - web
