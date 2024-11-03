@@ -1,15 +1,15 @@
 #!/usr/bin/sh
 # ----------------------------------------------------
-# This script synchronizes contents to keep the website
-# and services up-to-date.
+# This script initializes w3kl services on the server.
 # ----------------------------------------------------
 
 echo "# ----------------------------------------------"
-echo "# keyli3e.com: sync"
+echo "# boot.sh: installation"
 echo "# started at $(date)"
 echo "# ----------------------------------------------"
 
 set -e
 
-./git-sync.sh
-docker compose --profile web up --build -d
+docker compose --profile "*" up -d
+docker compose wait certbot
+docker compose --profile web restart

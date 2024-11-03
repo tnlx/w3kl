@@ -2,7 +2,6 @@ volumes:
   w3:             # Public assets to be served by Nginx
   certs:          # Certbot outputs SSL cerfiticates
   acme:           # Where certbot execs the ACME challenge
-  w3log:          # Nginx logs
 
 services:
 
@@ -11,14 +10,12 @@ services:
   # -----------------------------------------
 
   nginx:
-    image: nginx:alpine
+    build: ./nginx
     restart: always
     volumes:
-      - ./nginx/conf.d:/etc/nginx/conf.d:ro
       - certs:/etc/nginx/ssl:ro
-      - w3:/var/www/html:ro
+      - w3:/usr/share/nginx/html/:ro
       - acme:/var/www/acme:ro
-      - w3log:/var/log/nginx:rw
     ports:
       - '80:80'
       - '443:443'
@@ -31,7 +28,7 @@ services:
   # -----------------------------------------
 
   certbot:
-    image: certbot/cerbot
+    image: certbot/certbot
     depends_on:
       - nginx
     restart: no                # run & exit
@@ -40,9 +37,9 @@ services:
       - acme:/var/www/html:rw
     command: >
       certonly
-      --webroot -w /var/www/html
       -d "keyli3e.com"
       -d "www.keyli3e.com"
+      --webroot -w /var/www/html
       -m "$CERT_EMAIL"
       --non-interactive
       --agree-tos
@@ -50,34 +47,16 @@ services:
       - certs
 
   # -----------------------------------------
-  # Git-sync
-  # -----------------------------------------
-
-  # w3-sync:
-  #   image: registry.k8s.io/git-sync/git-sync:v4.3.0
-  #   restart: always
-  #   user: 1000:1000
-  #   volumes:
-  #     - ./git:/cfg:ro
-  #     - w3-src:/tmp/git
-  #   command: >
-  #     --repo=git@github.com:tnlx/keyli3e.com.git
-  #     --root=/tmp/git/root
-  #     --period=5m
-  #     --ssh-key-file=/cfg/id_ed25519
-
-  # -----------------------------------------
   # w3-build
-  #   SSH_URL_KLCOM :   the url to access the
-  #                     repository via SSH.
+  #   SSH_KEY_KLCOM: path to the ssh key with
+  #                  access to the repository
   # -----------------------------------------
 
   w3-build:
     build:
-      context: ${SSH_URL_KLCOM:-git@github.com:tnlx/keyli3e.com.git}#main
+      context: git@github.com:tnlx/keyli3e.com.git#main
       ssh:
-        - default              # mount the default SSH agent
-      no_cache: true
+        - default=$SSH_KEY_KLCOM
       args:
         BUILDKIT_CONTEXT_KEEP_GIT_DIR: 1
     restart: no                # run & exit
@@ -85,3 +64,4 @@ services:
       - w3:/html:rw
     profiles:
       - web
+      - build
