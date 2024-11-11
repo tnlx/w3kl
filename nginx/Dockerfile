@@ -11,5 +11,4 @@ COPY ssl/acme.conf /ssl/acme.conf
 # -------------------------------------------
 
 COPY ssl/ssl.conf /ssl.conf
-COPY ssl-conf.sh /docker-entrypoint.d/ssl-conf.sh
-RUN chmod u+x /docker-entrypoint.d/ssl-conf.sh
+COPY --chmod=0555 ssl-conf.sh /docker-entrypoint.d/ssl-conf.sh

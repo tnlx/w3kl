@@ -12,4 +12,4 @@ echo "# ----------------------------------------------"
 set -e
 
 ./git-sync.sh
-docker compose --profile web up --build -d
+docker compose --profile "*" up --build -d
