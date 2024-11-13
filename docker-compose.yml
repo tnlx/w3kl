@@ -54,7 +54,7 @@ services:
 
   w3-build:
     build:
-      context: git@github.com:tnlx/keyli3e.com.git#main
+      context: git@gitlab.com:tnlx/klcom.git#main
       ssh:
         - default=$SSH_KEY_KLCOM
       args:
