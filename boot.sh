@@ -10,6 +10,7 @@ echo "# ----------------------------------------------"
 
 set -e
 
-docker compose --profile "*" up -d
+./bake.sh
+docker compose --profile certs up -d
 docker compose wait certbot
 docker compose --profile web restart

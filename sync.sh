@@ -12,4 +12,5 @@ echo "# ----------------------------------------------"
 set -e
 
 ./git-sync.sh
-docker compose --profile "*" up --build -d
+./bake.sh
+docker compose --profile web up -d
