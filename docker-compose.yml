@@ -6,6 +6,8 @@ services:
 
   # -----------------------------------------
   # webserver
+  #   W3_DIR :     fs directory contains the
+  #                public web resources.
   # -----------------------------------------
 
   nginx:
@@ -44,23 +46,3 @@ services:
       --agree-tos
     profiles:
       - certs
-
-  # -----------------------------------------
-  # w3-build
-  #   SSH_KEY_KLCOM: path to the ssh key with
-  #                  access to the repository
-  # -----------------------------------------
-  w3-build:
-    build:
-      context: git@gitlab.com:tnlx/klcom.git#main
-      ssh:
-        - default=$SSH_KEY_KLCOM
-      args:
-        BUILDKIT_CONTEXT_KEEP_GIT_DIR: 1
-      x-bake:
-        output: $W3_DIR
-    # restart: no                # run & exit
-    # volumes:
-    #   - w3:/html:rw
-    profiles:
-      - build

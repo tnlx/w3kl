@@ -17,4 +17,4 @@ then
 fi
 
 # This 'bake' outputs all web assets to W3_DIR
-docker buildx bake
+SSH_AUTH_SOCK=${SSH_KEY_KLCOM} docker buildx bake -f bake.hcl -f cwd://klcom.hcl git@gitlab.com:tnlx/klcom.git
