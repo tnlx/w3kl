@@ -13,4 +13,4 @@ set -e
 
 ./git-sync.sh
 ./bake.sh
-docker compose --profile web up -d
+docker compose up -d

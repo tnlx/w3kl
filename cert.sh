@@ -16,4 +16,4 @@ set -e
 
 docker compose --profile certs up -d
 docker compose wait certbot
-docker compose --profile web restart
+docker compose restart
