@@ -13,4 +13,4 @@ set -e
 
 ./git-sync.sh
 ./bake.sh
-docker compose up -d
+docker compose --profile "*" up -d --build

@@ -11,10 +11,16 @@ set +a
 
 if [ ! -d "$W3_DIR" ];
 then
-    # Set the permissions so that nginx container
-    # can access it.
-    mkdir -p $W3_DIR && chmod +rx $W3_DIR
+    mkdir -p $W3_DIR
 fi
 
 # This 'bake' outputs all web assets to W3_DIR
-SSH_AUTH_SOCK=${SSH_KEY_KLCOM} docker buildx bake -f bake.hcl -f cwd://klcom.hcl git@gitlab.com:tnlx/klcom.git
+SSH_AUTH_SOCK=${SSH_KEY_KLCOM} docker buildx bake \
+                -f bake.hcl \
+                -f cwd://bake.hcl \
+                git@gitlab.com:tnlx/klcom.git
+
+# Set the permissions so that nginx container
+# can access it.
+#       -R              recursively
+chmod -R +rx $W3_DIR

@@ -35,8 +35,8 @@ services:
       - acme:/var/www/html:rw
     command: >
       certonly
-      -d "keyli3e.com"
-      -d "www.keyli3e.com"
+      --cert-name keyli3e.com
+      -d keyli3e.com,www.keyli3e.com,linef.keyli3e.com
       --webroot -w /var/www/html
       -m "$CERT_EMAIL"
       --non-interactive
