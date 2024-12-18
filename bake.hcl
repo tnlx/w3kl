@@ -2,7 +2,6 @@ variable "W3_DIR" {}
 
 target "linef" {
   context = "git@github.com:tnlx/linef.git"
-  ssh = ["default"]
   # Export the image content to fs
   # https://docs.docker.com/reference/cli/docker/buildx/build/#local
   output = ["${W3_DIR}/linef"]

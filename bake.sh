@@ -15,10 +15,12 @@ then
 fi
 
 # This 'bake' outputs all web assets to W3_DIR
-SSH_AUTH_SOCK=${SSH_KEY_KLCOM} docker buildx bake \
+SSH_AUTH_SOCK=${SSH_KEY_KLCOM} \
+docker buildx bake \
                 -f bake.hcl \
                 -f cwd://bake.hcl \
-                git@gitlab.com:tnlx/klcom.git
+                git@gitlab.com:tnlx/klcom.git \
+                --set *.ssh=default=${SSH_KEY_KLCOM}
 
 # Set the permissions so that nginx container
 # can access it.
