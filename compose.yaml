@@ -36,7 +36,7 @@ services:
     command: >
       certonly
       --cert-name keyli3e.com
-      -d keyli3e.com,www.keyli3e.com,linef.keyli3e.com
+      -d keyli3e.com,www.keyli3e.com
       --webroot -w /var/www/html
       -m "$CERT_EMAIL"
       --non-interactive
