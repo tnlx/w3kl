@@ -17,6 +17,7 @@ fi
 # This 'bake' outputs all web assets to W3_DIR
 SSH_AUTH_SOCK=${SSH_KEY_KLCOM} \
 docker buildx bake \
+               --allow ssh --allow=fs.write=$W3_DIR \
                 -f bake.hcl \
                 -f cwd://bake.hcl \
                 git@gitlab.com:tnlx/klcom.git \
