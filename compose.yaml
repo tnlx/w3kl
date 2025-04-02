@@ -6,15 +6,15 @@ services:
 
   # -----------------------------------------
   # webserver
-  #   W3_DIR :     fs directory contains the
-  #                public web resources.
   # -----------------------------------------
 
   nginx:
-    build: ./nginx
+    build:
+      context: ./nginx
+      additional_contexts:
+        - www=docker-image://klcom-w3
     restart: always
     volumes:
-      - ${W3_DIR}:/usr/share/nginx/html/:ro
       - certs:/etc/nginx/ssl:ro
       - acme:/var/www/acme:ro
     ports:

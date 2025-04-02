@@ -20,11 +20,6 @@ Set the environment variables:
 # Used during docker build step.
 SSH_KEY_KLCOM=
 
-# Location of the public website assets on file system
-#     - Written to by docker bake
-#     - Read by nginx
-W3_DIR=
-
 # Certbot / Let's Encrypt
 CERT_EMAIL=
 ```
