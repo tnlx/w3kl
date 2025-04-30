@@ -49,6 +49,6 @@ services:
   # -----------------------------------------
 
   m5x:
-    image: m5x             # built by bake.sh
+    image: registry.gitlab.com/tnlx/mailbox
     volumes:
       - ./.m5x/inbox:/inbox:rw
