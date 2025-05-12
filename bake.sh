@@ -10,10 +10,6 @@ set -a
 . ./.env
 set +a
 
-SSH_AUTH_SOCK=${SSH_KEY_KLCOM} \
-docker buildx bake \
-               --allow ssh \
-                -f bake.hcl \
-                git@gitlab.com:tnlx/klcom.git \
-                --set *.ssh=default=${SSH_KEY_KLCOM} \
-                --set default.tags=klcom-w3
+docker build --ssh default=${SSH_KEY_KLCOM} \
+             --tag klcom-w3 \
+             git@gitlab.com:tnlx/keyli3e.com.git
