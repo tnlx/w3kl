@@ -51,5 +51,8 @@ services:
   m5x:
     image: registry.gitlab.com/tnlx/mailbox
     pull_policy: daily    # cache image max. 24h
+    restart: always
+    ports:
+      - "127.0.0.1:9071:9071"
     volumes:
       - ./.m5x/inbox:/inbox:rw
