@@ -17,6 +17,7 @@ services:
     volumes:
       - certs:/etc/nginx/ssl:ro
       - acme:/var/www/acme:ro
+      - ./pine:/usr/share/nginx/html/pine:ro
     ports:
       - '80:80'
       - '443:443'
